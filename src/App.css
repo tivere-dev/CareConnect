@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 :root {
   --bg: #f5f6fa;
   --surface: #ffffff;
@@ -677,3 +678,6 @@ button {
     flex-direction: column;
   }
 }
+=======
+@import "tailwindcss";
+>>>>>>> f6de9aeb6c48d0d02decb40a7b993f1e4d7ec5c2
