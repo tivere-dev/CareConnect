@@ -2,7 +2,11 @@ import { Bell } from 'lucide-react';
 import { Search } from 'lucide-react';
 import { CalendarDays, ClipboardCheck, Users, Star, TrendingUp } from 'lucide-react';
 import { MoreVertical, Video, Check, X, NotebookPen } from 'lucide-react';
-import DoctorsImage1 from '../../assets/images/dr1.png';
+import Images from '../../assets/images/Doc11.png.jpg';
+import Images2 from '../../assets/images/Skepta.png.jpg';
+import Images3 from '../../assets/images/NaomiS.png.jpg';
+import Images4 from '../../assets/images/yatchy.png.jpg';
+import Images5 from '../../assets/images/indiaL.png.jpg';
 
 function DoctorDashboard() {
     const currentDate = new Date().toLocaleDateString("en-US", {
@@ -17,7 +21,7 @@ function DoctorDashboard() {
             title: "Total Appointments",
             value: "1,284",
             icon: CalendarDays,
-            arrow:     <TrendingUp className='w-4 h-4 mx-1' />,
+            arrow: <TrendingUp className='w-4 h-4 mx-1' />,
             badge: "+12%",
             badgeColor: "text-green-500",
             iconBg: "bg-blue-100",
@@ -53,10 +57,10 @@ function DoctorDashboard() {
     ];
 
     const schedule = [
-        { time: "08:00 AM", name: "Sarah Jenkins", desc: "Annual Routine Checkup", status: "ARRIVED" },
-        { time: "09:30 AM", name: "Robert Chen", desc: "Post-Op Consultation • Room 302", status: "IN-PROGRESS", active: true },
-        { time: "11:00 AM", name: "Elena Rodriguez", desc: "Flu Symptoms • Physical Exam", status: "CONFIRMED" },
-        { time: "01:30 PM", name: "Michael Wu", desc: "Cardiology Referral Discussion", status: "CONFIRMED" },
+        { time: "08:00 AM", name: "Naomi Sharron", desc: "Annual Routine Checkup", status: "ARRIVED", image: Images3 },
+        { time: "09:30 AM", name: "Skepta", desc: "Post-Op Consultation • Room 302", status: "IN-PROGRESS", active: true, image: Images2},
+        { time: "11:00 AM", name: "India Love", desc: "Flu Symptoms • Physical Exam", status: "CONFIRMED", image: Images5 },
+        { time: "01:30 PM", name: "Lil Yatchy", desc: "Cardiology Referral Discussion", status: "CONFIRMED", image: Images4 },
     ];
 
     const requests = [
@@ -80,7 +84,7 @@ function DoctorDashboard() {
 
                     <div className='bg-gray-300 w-0.5 h-10 mr-5'></div>
 
-                    <img src={DoctorsImage1} alt="" className='rounded-full w-10 h-10' />
+                    <img src={Images} alt="" className='rounded-full w-10 h-11' />
                     <p className='mx-2 mt-2'>Dr. Vance</p>
                 </header>
 
@@ -100,7 +104,7 @@ function DoctorDashboard() {
                                     <span
                                         className={`absolute top-4 flex right-4 text-xs px-2 py-1 mb-2.5 rounded-full bg-gray-100 ${card.badgeColor}`}
                                     >
-                                       {card.arrow} {card.badge}
+                                        {card.arrow} {card.badge}
                                     </span>
 
                                     <div className="mt-1.5 mb-2.5">
@@ -141,15 +145,25 @@ function DoctorDashboard() {
 
                             <div className="space-y-4">
                                 {schedule.map((item, idx) => (
+
                                     <div
                                         key={idx}
                                         className={`flex items-center justify-between p-4 rounded-xl border ${item.active ? "bg-indigo-700 text-white" : "bg-gray-50"
                                             }`}>
-                                        <div>
-                                            <h4 className="font-semibold">{item.name}</h4>
-                                            <p className={`text-sm ${item.active ? "text-indigo-200" : "text-gray-500"}`}>
-                                                {item.desc}
-                                            </p>
+
+                                        <div className='flex gap-4'>
+                                            <img
+                                                src={item.image}
+                                                alt={item.name}
+                                                className="w-10 h-10 rounded-full object-cover border"
+                                            />
+                                            <div className='flex flex-col'>
+                                                <h4 className="font-semibold"> {item.name}</h4>
+                                                <p className={`text-sm ${item.active ? "text-indigo-200" : "text-gray-500"}`}>
+                                                    {item.desc}
+                                                </p>
+                                            </div>
+
                                         </div>
 
                                         <span
@@ -238,7 +252,7 @@ function DoctorDashboard() {
 
                                 <div className="w-full h-87.5 p-4">
                                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.6085992148487!2d3.400170275981058!3d6.444274493547049!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf4cf886977d5%3A0x7e2c77c6c788be1a!2sMelodia%20Coding%20Academy!5e0!3m2!1sen!2sng!4v1771847582119!5m2!1sen!2sng" frameborder="10" className='rounded-3xl w-90'></iframe>
-                                    <p className='pt-5 text-gray-400'>Wait Time Avg: <span className='font-bold text-black'>12m</span></p>
+                                    <p className='pt-3 text-gray-400'>Wait Time Avg: <span className='font-bold text-black'>12m</span></p>
 
                                 </div>
                             </div>
