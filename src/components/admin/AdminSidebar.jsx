@@ -11,10 +11,10 @@ import {
 import { NavLink } from "react-router-dom";
 
 const mainLinks = [
-  { label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
-  { label: "Doctors", icon: Stethoscope, to: "/doctors" },
-  { label: "Patients", icon: UserRound, to: "/patients" },
-  { label: "Appointments", icon: ClipboardList, to: "/appointments" },
+  { label: "Dashboard", icon: LayoutDashboard, to: "/admin/dashboard" },
+  { label: "Doctors", icon: Stethoscope, to: "/admin/doctors" },
+  { label: "Patients", icon: UserRound, to: "/admin/patients" },
+  { label: "Appointments", icon: ClipboardList, to: "/admin/appointments" },
 ];
 
 const systemLinks = [
@@ -25,7 +25,7 @@ const systemLinks = [
 export default function AdminSidebar() {
   return (
     <aside className="admin-sidebar">
-      <NavLink className="admin-logo" to="/dashboard" aria-label="CareConnect home">
+      <NavLink className="admin-logo" to="/admin/dashboard" aria-label="CareConnect home">
         <span className="admin-logo-mark">
           <ShieldPlus size={14} />
         </span>

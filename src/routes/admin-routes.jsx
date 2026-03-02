@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import DashboardPage from "./pages/admin/Dashboard";
-import DoctorManagementPage from "./pages/admin/DoctorManagement";
-import EditDoctorPage from "./pages/admin/EditDoctor";
-import NewDoctorPage from "./pages/admin/NewDoctor";
-import EditPatientPage from "./pages/admin/EditPatient";
-import NewPatientPage from "./pages/admin/NewPatient";
-import AppointmentsPage from "./pages/admin/Appointments";
-import NewAppointmentPage from "./pages/admin/NewAppointment";
-import PatientsPage from "./pages/admin/Patients";
-import LandingPage from "./pages/homepage";
+import DashboardPage from "../pages/admin/Dashboard";
+import DoctorManagementPage from "../pages/admin/DoctorManagement";
+import EditDoctorPage from "../pages/admin/EditDoctor";
+import NewDoctorPage from "../pages/admin/NewDoctor";
+import EditPatientPage from "../pages/admin/EditPatient";
+import NewPatientPage from "../pages/admin/NewPatient";
+import AppointmentsPage from "../pages/admin/Appointments";
+import NewAppointmentPage from "../pages/admin/NewAppointment";
+import PatientsPage from "../pages/admin/Patients";
+import LandingPage from "../pages/homepage";
 
 const initialDoctors = [
   {
@@ -150,7 +150,7 @@ const initialAppointments = [
   },
 ];
 
-function App2() {
+function Admin() {
   const [doctors, setDoctors] = useState(initialDoctors);
   const [patients, setPatients] = useState(initialPatients);
   const [appointments, setAppointments] = useState(initialAppointments);
@@ -200,27 +200,27 @@ function App2() {
           element={<LandingPage doctors={doctors} onDeleteDoctor={handleDeleteDoctor} />}
         />
         <Route
-          path="/doctors"
+          path="/admin/doctors"
           element={<DoctorManagementPage doctors={doctors} onDeleteDoctor={handleDeleteDoctor} />}
         />
-        <Route path="/doctors/new" element={<NewDoctorPage onAddDoctor={handleAddDoctor} />} />
+        <Route path="/admin/doctors/new" element={<NewDoctorPage onAddDoctor={handleAddDoctor} />} />
         <Route
-          path="/doctors/:id/edit"
+          path="/admin/doctors/:id/edit"
           element={<EditDoctorPage doctors={doctors} onUpdateDoctor={handleUpdateDoctor} />}
         />
-        <Route path="/patients/new" element={<NewPatientPage onAddPatient={handleAddPatient} />} />
+        <Route path="/admin/patients/new" element={<NewPatientPage onAddPatient={handleAddPatient} />} />
         <Route
-          path="/patients/:id/edit"
+          path="/admin/patients/:id/edit"
           element={<EditPatientPage patients={patients} onUpdatePatient={handleUpdatePatient} />}
         />
-        <Route path="/patients" element={<PatientsPage patients={patients} />} />
-        <Route path="/appointments/new" element={<NewAppointmentPage onAddAppointment={handleAddAppointment} />} />
-        <Route path="/appointments" element={<AppointmentsPage appointments={appointments} />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/admin/patients" element={<PatientsPage patients={patients} />} />
+        <Route path="/admin/appointments/new" element={<NewAppointmentPage onAddAppointment={handleAddAppointment} />} />
+        <Route path="/admin/appointments" element={<AppointmentsPage appointments={appointments} />} />
+        <Route path="/admin/dashboard" element={<DashboardPage />} />
         <Route path="/landing" element={<LandingPage />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
-export default App2;
+export default Admin;
