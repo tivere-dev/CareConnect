@@ -1,0 +1,509 @@
+/* =========================================
+   GLOBAL
+========================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #f4f6f9;
+  color: #1f2937;
+}
+
+.dashboard {
+  width: 100%;
+}
+
+/* =========================================
+   NAVBAR
+========================================= */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: #2563eb;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.logo h2 {
+  font-size: 20px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+}
+
+.nav-links li {
+  cursor: pointer;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.nav-links .active {
+  color: #2563eb;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+}
+
+.user h4 {
+  font-size: 14px;
+}
+
+.user span {
+  font-size: 12px;
+  color: gray;
+}
+
+/* =========================================
+   MAIN LAYOUT
+========================================= */
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  padding: 30px 40px;
+}
+
+/* =========================================
+   LEFT CONTENT
+========================================= */
+
+.content-left {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.welcome-card {
+  /* background: white; */
+  padding: 25px;
+  /* border-radius: 12px; */
+  /* box-shadow: 0 4px 14px rgba(0,0,0,0.05); */
+  margin-top: -5px;
+}
+
+.welcome-card h1 {
+  font-size: 34px;
+}
+
+.welcome-card p {
+  margin-top: -8px;
+  color: gray;
+}
+
+/* =========================================
+   APPOINTMENT CARD
+========================================= */
+
+.appointment-card {
+  display: flex;
+  justify-content: space-between;
+  /* background: rgb(29, 3, 141); */
+  background: navy;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  /* color: white; */
+  /* width: 50%; */
+  margin-top: -5%;
+}
+
+.appointment-info {
+  display: flex;
+  gap: 15px;
+}
+
+.appointment-info img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.badge {
+  background: #7a8281;
+  color: white;
+  padding: 3px 8px;
+  font-size: 11px;
+  border-radius: 6px;
+}
+
+.badge h3 p {
+  color: white;
+}
+
+
+.buttons {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+/* BUTTONS */
+
+.btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn.primary {
+  background: #25ebac;
+  color: white;
+}
+
+.btn.outline {
+  border: 1px solid #d1d5db;
+  background: white;
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: white;
+}
+
+/* =========================================
+   STATS
+========================================= */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+}
+
+.stat-card p {
+  font-size: 13px;
+  color: gray;
+}
+
+.stat-card h2 {
+  font-size: 20px;
+}
+
+/* =========================================
+   QUICK ACTIONS
+========================================= */
+
+.section-title {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 20px;
+}
+
+.action-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  transition: 0.2s;
+}
+
+.action-card:hover {
+  transform: translateY(-3px);
+}
+
+.action-card h4 {
+  margin-top: 10px;
+}
+
+.action-card p {
+  font-size: 13px;
+  color: gray;
+}
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 95px;
+  /* width: 100%; */
+}
+
+/* .ttt{
+  font-size: 15px;
+} */
+
+/* HEALTH FEED */
+
+.health-feed {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+}
+
+.feed-item {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.feed-item h4 {
+  font-size: 14px;
+}
+
+.feed-item p {
+  font-size: 12px;
+  color: gray;
+}
+
+.feed-item span {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.feed-itemxx h4{
+  font-size: 11px;
+}
+/* =========================================
+   HEALTH SCORE
+========================================= */
+
+.health-score {
+  background: navy;
+  padding: 20px;
+  border-radius: 12px;
+  /* box-shadow: 0 4px 14px rgba(0,0,0,0.05); */
+  box-shadow: white;
+  width: 50%;
+  height: 48%;
+  margin-left: 104%;
+  margin-top: -26%;
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #355687;
+  /* background:; */
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.progress {
+  width: 84%;
+  height: 100%;
+  background: oklab(69.517% -0.05741 0.03077);
+  border-radius: 10px;
+}
+
+.health-text {
+  font-size: 13px;
+  color: whitesmoke;
+}
+
+.vitals {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  color: white;
+}
+
+.vital p {
+  font-size: 12px;
+  color: gray;
+}
+
+.vital h4 {
+  margin-top: 3px;
+}
+
+/* =========================================
+   CLINIC CARD
+========================================= */
+
+.clinic-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px hsla(210, 3%, 12%, 0.05);
+  margin-bottom: 50%;
+  /* box-shadow: white; */
+  /* width: 48px; */
+  margin-top: 12%;
+}
+
+.map {
+  height: 130px;
+  background: #e5e7eb;
+}
+
+.clinic-info {
+  padding: 15px;
+}
+
+.small {
+  font-size: 11px;
+  color: gray;
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+.consultations {
+  margin-top: -25%;
+  /* margin-bottom: -80px; */
+  width: 155%;
+}
+
+.consult-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.consult-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.consult-table th,
+.consult-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.consult-table th {
+  background: #f9fafb;
+  font-size: 13px;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.status.success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.footer {
+  text-align: center;
+  margin-top: 2px;
+  padding: 20px;
+  color: gray;
+  font-size: 13px;
+  /* margin-right: 500%; */
+  /* width: 200%; */
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .actions-grid {
+    grid-template-columns: 1fr;
+    display: flex;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
