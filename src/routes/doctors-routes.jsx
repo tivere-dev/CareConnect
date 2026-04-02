@@ -1,5 +1,6 @@
 // import './App.css
 import '../index.css'
+// import "./doctorsProfile.css"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "../pages/homepage";
 import DoctorDashboard from "../pages/doctors/dashboard";
@@ -7,6 +8,7 @@ import Login from "../pages/login";
 import Register from '../pages/Registration';
 import Dashboard from '../pages/patients/dashboard';
 import Profile from "../pages/patients/doctorsProfile"
+import Booking from '../pages/patients/Appiontments';
 
 function DoctorsRoutes() {
 
@@ -20,6 +22,7 @@ function DoctorsRoutes() {
           <Route path='/patient/dashboard' element={<Dashboard />} />
           <Route path='/register' element={<Register />} />
           <Route path='/doctor/profile' element={<Profile />} />
+          <Route path='/booking' element={<Booking />} />
         </Routes>
       </BrowserRouter>
 
