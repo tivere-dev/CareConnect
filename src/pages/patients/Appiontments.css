@@ -1,0 +1,323 @@
+/* ================= GLOBAL ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+}
+
+/* ================= LAYOUT ================= */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.main {
+  padding: 40px 0;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-right: 20px; */
+  margin-left: 10px;
+}
+
+/* ================= NAVBAR ================= */
+header {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  /* margin-right: 20px; */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.logo-box {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #1e3a8a;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #1e3a8a;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 14px;
+  color: #64748b;
+  transition: 0.3s;  margin-left: 10px;
+}
+
+.nav-links a:hover {
+  color: #1d4ed8;
+}
+
+.nav-links .active {
+  color: #1e3a8a;
+  border-bottom: 2px solid #1e3a8a;
+  padding-bottom: 4px;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* ================= PAGE HEADER ================= */
+.page-header h1 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #0f172a;
+  /* margin-bottom: 20%; */
+  /* margin-left: 60%; */
+}
+
+.page-header p {
+  color: #64748b;
+  font-size: 16px;
+  /* display: flex; */
+  width: 35%;
+
+}
+
+/* ================= GRID ================= */
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  /* margin-top: 15%; */
+}
+
+/* mobile */
+@media (max-width: 1000px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= CARD ================= */
+.card {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  margin-top: 3%;
+  width: 100%;
+}
+
+/* ================= SECTION ================= */
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-number {
+  background: #1e3a8a;
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+/* ================= INPUTS ================= */
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ================= PROGRESS BAR ================= */
+.progress-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.progress-bar div {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  /* background: white; */
+}
+
+.progress-bar .active {
+  background: #1e3a8a;
+}
+
+/* ================= SUMMARY ================= */
+.summary .card h3 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.doctor-box {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.doctor-box img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.doctor-box h4 {
+  font-size: 16px;
+}
+
+.doctor-box p {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.rating {
+  font-size: 12px;
+  color: #f59e0b;
+}
+
+/* ================= DETAILS ================= */
+.details {
+  font-size: 14px;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 16px 0;
+  margin: 16px 0;
+}
+
+.details p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: #334155;
+}
+
+/* ================= PRICING ================= */
+.pricing p,
+.pricing h4 {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.pricing h4 {
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+/* ================= BUTTON ================= */
+.btn-primary {
+  width: 100%;
+  background: #1e3a8a;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.3s;
+  margin-top: 10%;
+  margin-bottom: 5%;
+}
+
+.btn-primary:hover {
+  background: #1e40af;
+}
+
+/* ================= HELP BOX ================= */
+.help-box {
+  margin-top: 16px;
+  background: #ecfeff;
+  border: 1px solid #57abb3;
+  padding: 12px;
+  border-radius: 22px;
+  font-size: 13px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.help-box a {
+  color: #16819e;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ================= FOOTER ================= */
+.footer {
+  margin-top: auto;
+  border-top: 1px solid #e2e8f0;
+  padding: 20px 0;
+  text-align: center;
+  font-size: 12px;
+  color: #94a3b8;
+}

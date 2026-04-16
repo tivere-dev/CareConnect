@@ -1,0 +1,200 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #f5f7fb;
+  margin: 0;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+.logo {
+  color: #2563eb;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.search {
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+}
+
+/* LAYOUT */
+.main {
+  display: flex;
+  gap: 20px;
+  padding: 20px 40px;
+}
+
+.left {
+  flex: 2;
+}
+
+.right {
+  flex: 1;
+}
+
+/* CARDS */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* PROFILE */
+.profile {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.profile img {
+  width: 80px;
+  border-radius: 10px;
+}
+
+.badge {
+  background: #e0ecff;
+  color: #2563eb;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.rating {
+  color: #f59e0b;
+}
+
+/* TAGS */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tags span {
+  background: #eef2ff;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+/* LOCATION */
+.location {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.location img {
+  width: 120px;
+  border-radius: 8px;
+}
+
+/* CALENDAR */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 15px;
+}
+
+.calendar button {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #f3f4f6;
+  cursor: pointer;
+}
+
+.calendar .active {
+  background: #2563eb;
+  color: white;
+}
+
+/* TIME */
+.time-section {
+  margin-bottom: 10px;
+}
+
+.time-section button {
+  margin: 5px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+.time-section .active {
+  background: #2563eb;
+  color: white;
+}
+
+/* CONFIRM BUTTON */
+/* .confirm {
+  width: 100%;
+  padding: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  margin-top: 10px;
+  font-weight: bold;
+  cursor: pointer;
+} */
+
+.confirm {
+  width: 100%;
+  padding: 14px;
+  background-color: navy; /* nice green */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.confirm:hover {
+  background-color: #4565a0;
+  transform: translateY(-1px);
+}
+
+/* Active (click) effect */
+.confirm:active {
+  transform: scale(0.98);
+}
+
+/* Text below button */
+.confirm + p {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #777;
+  text-align: center;
+}
+
+/* FOOTER */
+.footer {
+  margin-top: auto;
+  border-top: 1px solid #e2e8f0;
+  padding: 20px 0;
+  text-align: center;
+  font-size: 12px;
+  color: #94a3b8;
+}
