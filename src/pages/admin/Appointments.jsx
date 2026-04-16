@@ -31,7 +31,7 @@ export default function AppointmentsPage({ appointments }) {
             <h1>Appointment Management</h1>
           </div>
 
-          <Link to="/appointments/new" className="doctor-add-btn">
+          <Link to="/admin/appointments/new" className="doctor-add-btn">
             <Plus size={18} />
             <span>New Appointment</span>
           </Link>

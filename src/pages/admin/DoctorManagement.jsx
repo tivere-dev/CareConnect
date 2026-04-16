@@ -32,7 +32,7 @@ export default function DoctorManagementPage({ doctors, onDeleteDoctor }) {
             <h1>Doctor Management</h1>
           </div>
 
-          <Link className="doctor-add-btn" to="/doctors/new">
+          <Link className="doctor-add-btn" to="/admin/doctors/new">
             <Plus size={18} />
             <span>Add New Doctor</span>
           </Link>

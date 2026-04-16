@@ -41,7 +41,7 @@ export default function PatientsPage({ patients }) {
             <h1>Patient Management</h1>
           </div>
 
-          <Link to="/patients/new" className="doctor-add-btn">
+          <Link to="/admin/patients/new" className="doctor-add-btn">
             <Plus size={18} />
             <span>Add New Patient</span>
           </Link>

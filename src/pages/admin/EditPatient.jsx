@@ -37,7 +37,7 @@ export default function EditPatientPage({ patients, onUpdatePatient }) {
         <AdminSidebar />
         <main className="doctor-main">
           <p>Patient not found.</p>
-          <Link to="/patients" className="doctor-back-link">
+          <Link to="/admin/patients" className="doctor-back-link">
             <ArrowLeft size={16} />
             <span>Back to Patients</span>
           </Link>
@@ -54,7 +54,7 @@ export default function EditPatientPage({ patients, onUpdatePatient }) {
   function handleSubmit(event) {
     event.preventDefault();
     onUpdatePatient(patient.id, { ...formData, age: Number(formData.age) });
-    navigate("/patients");
+    navigate("/admin/patients");
   }
 
   return (
@@ -63,7 +63,7 @@ export default function EditPatientPage({ patients, onUpdatePatient }) {
 
       <main className="doctor-main">
         <div className="doctor-form-head">
-          <Link to="/patients" className="doctor-back-link">
+          <Link to="/admin/patients" className="doctor-back-link">
             <ArrowLeft size={16} />
             <span>Back to Patients</span>
           </Link>
@@ -134,7 +134,7 @@ export default function EditPatientPage({ patients, onUpdatePatient }) {
           </label>
 
           <div className="doctor-form-actions">
-            <Link to="/patients" className="doctor-outline-btn">
+            <Link to="/admin/patients" className="doctor-outline-btn">
               Cancel
             </Link>
             <button type="submit" className="doctor-add-btn">

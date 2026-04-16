@@ -33,7 +33,6 @@ export default function Navbar() {
         <div className="nav-actions">
           <button className="text-btn">Sign In</button>
           <button className="pill-btn">Register</button>
-          <Link to="/doctor/dashboard">Dashboard</Link>
         </div>
 
         <button

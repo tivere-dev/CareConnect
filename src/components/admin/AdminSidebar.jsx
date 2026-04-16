@@ -8,7 +8,9 @@ import {
   User,
   UserRound,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { SETTINGS_STORAGE_KEY, SETTINGS_UPDATED_EVENT } from "../../constants/adminSettings";
 
 const mainLinks = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/admin/dashboard" },
@@ -18,45 +20,97 @@ const mainLinks = [
 ];
 
 const systemLinks = [
-  { label: "Reports", icon: FileBarChart2 },
-  { label: "Settings", icon: Settings },
+  { label: "Reports", icon: FileBarChart2, to: "/admin/reports" },
+  { label: "Settings", icon: Settings, to: "/admin/settings" },
 ];
 
+const defaultBrandSettings = {
+  platformName: "CareConnect",
+  logoDataUrl: "",
+};
+
+function readBrandSettings() {
+  try {
+    const raw = localStorage.getItem(SETTINGS_STORAGE_KEY);
+    if (!raw) return defaultBrandSettings;
+
+    const parsed = JSON.parse(raw);
+    return {
+      platformName: parsed?.platformName?.trim() || defaultBrandSettings.platformName,
+      logoDataUrl: parsed?.logoDataUrl || "",
+    };
+  } catch {
+    return defaultBrandSettings;
+  }
+}
+
 export default function AdminSidebar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [brandSettings, setBrandSettings] = useState(() => readBrandSettings());
+
+  useEffect(() => {
+    function syncBrand() {
+      setBrandSettings(readBrandSettings());
+    }
+
+    window.addEventListener("storage", syncBrand);
+    window.addEventListener(SETTINGS_UPDATED_EVENT, syncBrand);
+    return () => {
+      window.removeEventListener("storage", syncBrand);
+      window.removeEventListener(SETTINGS_UPDATED_EVENT, syncBrand);
+    };
+  }, []);
+
+  function isLinkActive(to) {
+    if (location.pathname === to) return true;
+    if (to === "/admin/reports" && location.pathname === "/reports") return true;
+    if (to === "/admin/settings" && location.pathname === "/settings") return true;
+    return false;
+  }
+
   return (
     <aside className="admin-sidebar">
-      <NavLink className="admin-logo" to="/admin/dashboard" aria-label="CareConnect home">
+      <button
+        type="button"
+        className="admin-logo admin-logo-btn"
+        aria-label="CareConnect home"
+        onClick={() => navigate("/admin/dashboard")}
+      >
         <span className="admin-logo-mark">
-          <ShieldPlus size={14} />
+          {brandSettings.logoDataUrl ? (
+            <img src={brandSettings.logoDataUrl} alt="Platform logo" className="admin-logo-image" />
+          ) : (
+            <ShieldPlus size={14} />
+          )}
         </span>
-        <span>CareConnect</span>
-      </NavLink>
+        <span>{brandSettings.platformName}</span>
+      </button>
 
       <nav className="admin-nav" aria-label="Main">
-        {mainLinks.map(({ label, icon: Icon, to }) =>
-          to ? (
-            <NavLink
-              className={({ isActive }) => `admin-nav-link ${isActive ? "active" : ""}`}
-              to={to}
-              key={label}
-            >
-              <Icon size={18} />
-              <span>{label}</span>
-            </NavLink>
-          ) : (
-            <button type="button" className="admin-nav-link admin-nav-button" key={label}>
-              <Icon size={18} />
-              <span>{label}</span>
-            </button>
-          ),
-        )}
+        {mainLinks.map(({ label, icon: Icon, to }) => (
+          <button
+            type="button"
+            className={`admin-nav-link admin-nav-button ${isLinkActive(to) ? "active" : ""}`}
+            onClick={() => navigate(to)}
+            key={label}
+          >
+            <Icon size={18} />
+            <span>{label}</span>
+          </button>
+        ))}
       </nav>
 
       <div className="admin-nav-label">SYSTEM</div>
 
       <nav className="admin-nav" aria-label="System">
-        {systemLinks.map(({ label, icon: Icon }) => (
-          <button type="button" className="admin-nav-link admin-nav-button" key={label}>
+        {systemLinks.map(({ label, icon: Icon, to }) => (
+          <button
+            type="button"
+            className={`admin-nav-link admin-nav-button ${isLinkActive(to) ? "active" : ""}`}
+            onClick={() => navigate(to)}
+            key={label}
+          >
             <Icon size={18} />
             <span>{label}</span>
           </button>

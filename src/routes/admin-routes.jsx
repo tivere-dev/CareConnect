@@ -9,6 +9,8 @@ import NewPatientPage from "../pages/admin/NewPatient";
 import AppointmentsPage from "../pages/admin/Appointments";
 import NewAppointmentPage from "../pages/admin/NewAppointment";
 import PatientsPage from "../pages/admin/Patients";
+import ReportsPage from "../pages/admin/Reports";
+import SettingsPage from "../pages/admin/Settings";
 import LandingPage from "../pages/homepage";
 
 const initialDoctors = [
@@ -216,6 +218,12 @@ function Admin() {
         <Route path="/admin/patients" element={<PatientsPage patients={patients} />} />
         <Route path="/admin/appointments/new" element={<NewAppointmentPage onAddAppointment={handleAddAppointment} />} />
         <Route path="/admin/appointments" element={<AppointmentsPage appointments={appointments} />} />
+        <Route path="/admin/reports" element={<ReportsPage />} />
+        <Route path="/admin/settings" element={<SettingsPage />} />
+        <Route path="/admin/report" element={<ReportsPage />} />
+        <Route path="/admin/setting" element={<SettingsPage />} />
+        <Route path="/reports" element={<ReportsPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="/admin/dashboard" element={<DashboardPage />} />
         <Route path="/landing" element={<LandingPage />} />
       </Routes>

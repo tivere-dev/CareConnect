@@ -50,7 +50,7 @@ export default function NewAppointmentPage({ onAddAppointment }) {
       time: toDisplayTime(formData.time),
     });
 
-    navigate("/appointments");
+    navigate("/admin/appointments");
   }
 
   return (
@@ -59,7 +59,7 @@ export default function NewAppointmentPage({ onAddAppointment }) {
 
       <main className="doctor-main">
         <div className="doctor-form-head">
-          <Link to="/appointments" className="doctor-back-link">
+          <Link to="/admin/appointments" className="doctor-back-link">
             <ArrowLeft size={16} />
             <span>Back to Appointments</span>
           </Link>
@@ -136,7 +136,7 @@ export default function NewAppointmentPage({ onAddAppointment }) {
           </label>
 
           <div className="doctor-form-actions">
-            <Link to="/appointments" className="doctor-outline-btn">
+            <Link to="/admin/appointments" className="doctor-outline-btn">
               Cancel
             </Link>
             <button type="submit" className="doctor-add-btn">
