@@ -1,8 +1,11 @@
 /* ================= GLOBAL ================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Global reset lives in the base layer so Tailwind utility classes can override it */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 }
 
 body {
@@ -110,7 +113,7 @@ header {
 }
 
 /* ================= GRID ================= */
-.grid {
+.booking-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 40px;
@@ -119,7 +122,7 @@ header {
 
 /* mobile */
 @media (max-width: 1000px) {
-  .grid {
+  .booking-grid {
     grid-template-columns: 1fr;
   }
 }

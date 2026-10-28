@@ -68,7 +68,7 @@ const Booking = () => {
         {/* PAGE TITLE */}
 
 
-        <div className="grid">
+        <div className="booking-grid">
 
           {/* LEFT SIDE (FORMS) */}
           <div className="form-section">
