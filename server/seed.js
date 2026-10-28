@@ -72,11 +72,11 @@ const patients = [
 ];
 
 const appointments = [
-  { patient: "Sarah Jenkins", doctor: "Dr. Robert Miller", type: "Follow-up", date: "Oct 12, 2023", time: "10:30 AM", status: "Confirmed" },
+  { patient: "Sarah Jenkins", doctor: "Dr. Robert Miller", type: "Follow-up", date: "Oct 12, 2023", time: "10:30 AM", status: "Accepted" },
   { patient: "Michael Cho", doctor: "Dr. Emma Watson", type: "New Visit", date: "Oct 12, 2023", time: "01:15 PM", status: "Pending" },
-  { patient: "Olivia Rhye", doctor: "Dr. Sarah Johnson", type: "Consultation", date: "Oct 12, 2023", time: "03:30 PM", status: "In Progress" },
-  { patient: "David Wilson", doctor: "Dr. Mark Sloan", type: "Emergency", date: "Oct 13, 2023", time: "09:00 AM", status: "Canceled" },
-  { patient: "Emma Lawson", doctor: "Dr. Lisa Thompson", type: "Routine Check", date: "Oct 13, 2023", time: "11:45 AM", status: "Confirmed" },
+  { patient: "Olivia Rhye", doctor: "Dr. Sarah Johnson", type: "Consultation", date: "Oct 12, 2023", time: "03:30 PM", status: "Completed" },
+  { patient: "David Wilson", doctor: "Dr. Mark Sloan", type: "Emergency", date: "Oct 13, 2023", time: "09:00 AM", status: "Rejected" },
+  { patient: "Emma Lawson", doctor: "Dr. Lisa Thompson", type: "Routine Check", date: "Oct 13, 2023", time: "11:45 AM", status: "Accepted" },
 ];
 
 async function seed() {
@@ -91,20 +91,30 @@ async function seed() {
   ]);
   console.log("Cleared existing data");
 
-  await User.create([
+  const [, john, sarah] = await User.create([
     { name: "Admin User", email: "admin@careconnect.com", password: "admin123", role: "admin" },
     { name: "John Doe", email: "john@careconnect.com", password: "patient123", role: "patient" },
     { name: "Dr. Sarah Jenkins", email: "sarah@careconnect.com", password: "doctor123", role: "doctor" },
   ]);
   console.log("Seeded users");
 
-  await Doctor.insertMany(doctors);
+  // Link the demo doctor and patient accounts to their profiles
+  await Doctor.insertMany(
+    doctors.map((d) => (d.name === sarah.name ? { ...d, userId: sarah._id } : d)),
+  );
   console.log("Seeded doctors");
 
-  await Patient.insertMany(patients);
+  await Patient.insertMany([
+    ...patients,
+    { userId: john._id, name: john.name, email: john.email, age: 30, gender: "Male", condition: "Annual check-up", doctor: sarah.name },
+  ]);
   console.log("Seeded patients");
 
-  await Appointment.insertMany(appointments);
+  await Appointment.insertMany([
+    ...appointments,
+    { patient: john.name, patientUserId: john._id, doctor: sarah.name, doctorUserId: sarah._id, type: "Consultation", date: "Nov 18, 2026", time: "10:00 AM", status: "Pending" },
+    { patient: john.name, patientUserId: john._id, doctor: sarah.name, doctorUserId: sarah._id, type: "Follow-up", date: "Oct 02, 2026", time: "02:30 PM", status: "Completed" },
+  ]);
   console.log("Seeded appointments");
 
   console.log("Seed complete!");

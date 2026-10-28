@@ -26,18 +26,19 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", auth, adminOnly, async (req, res) => {
   try {
-    const { password, ...doctorData } = req.body;
+    const { password, userId, ...doctorData } = req.body;
 
     if (password && doctorData.email) {
-      const existingUser = await User.findOne({ email: doctorData.email });
-      if (!existingUser) {
-        await User.create({
+      let doctorUser = await User.findOne({ email: doctorData.email });
+      if (!doctorUser) {
+        doctorUser = await User.create({
           name: doctorData.name,
           email: doctorData.email,
           password,
           role: "doctor",
         });
       }
+      if (doctorUser.role === "doctor") doctorData.userId = doctorUser._id;
     }
 
     const doctor = await Doctor.create(doctorData);

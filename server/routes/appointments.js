@@ -1,28 +1,28 @@
 import { Router } from "express";
 import Appointment from "../models/Appointment.js";
 import Notification from "../models/Notification.js";
-import User from "../models/User.js";
+import Doctor from "../models/Doctor.js";
+import Patient from "../models/Patient.js";
 import auth, { adminOnly } from "../middleware/auth.js";
 
 const router = Router();
 
 router.use(auth);
 
-// Patients and doctors can only access appointments they are part of
+// Patients and doctors can only access appointments linked to their own account
 function canAccess(user, appointment) {
   if (user.role === "admin") return true;
-  if (user.role === "patient") return appointment.patient === user.name;
-  if (user.role === "doctor") return appointment.doctor === user.name;
+  if (user.role === "patient") return String(appointment.patientUserId) === user.id;
+  if (user.role === "doctor") return String(appointment.doctorUserId) === user.id;
   return false;
 }
 
 router.get("/", async (req, res) => {
   try {
     const filter = {};
-    if (req.query.patient) filter.patient = req.query.patient;
-    if (req.query.doctor) filter.doctor = req.query.doctor;
-    if (req.user.role === "patient") filter.patient = req.user.name;
-    if (req.user.role === "doctor") filter.doctor = req.user.name;
+    if (req.user.role === "patient") filter.patientUserId = req.user.id;
+    else if (req.user.role === "doctor") filter.doctorUserId = req.user.id;
+    else if (req.user.role !== "admin") return res.json([]);
     const appointments = await Appointment.find(filter).sort({ createdAt: -1 });
     res.json(appointments);
   } catch (err) {
@@ -44,16 +44,36 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const data = { ...req.body };
+    const { type, date, time, doctorId, patientId } = req.body;
+    const data = { type, date, time };
+
     if (req.user.role === "admin") {
       data.createdBy = "admin";
       data.status = "Accepted";
-    } else {
-      data.createdBy = req.user.role;
+    } else if (req.user.role === "patient") {
+      data.createdBy = "patient";
       data.status = "Pending";
-      if (req.user.role === "patient") data.patient = req.user.name;
-      if (req.user.role === "doctor") data.doctor = req.user.name;
+    } else {
+      return res.status(403).json({ message: "Only patients and admins can book appointments" });
     }
+
+    // Doctor: always resolved from the selected doctor profile
+    const doctor = doctorId && (await Doctor.findById(doctorId).catch(() => null));
+    if (!doctor) return res.status(400).json({ message: "Please select a valid doctor" });
+    data.doctor = doctor.name;
+    data.doctorUserId = doctor.userId;
+
+    // Patient: patients book for themselves; admins pick a patient profile
+    if (req.user.role === "patient") {
+      data.patient = req.user.name;
+      data.patientUserId = req.user.id;
+    } else {
+      const patient = patientId && (await Patient.findById(patientId).catch(() => null));
+      if (!patient) return res.status(400).json({ message: "Please select a valid patient" });
+      data.patient = patient.name;
+      data.patientUserId = patient.userId;
+    }
+
     const appointment = await Appointment.create(data);
     res.status(201).json(appointment);
   } catch (err) {
@@ -83,17 +103,14 @@ router.patch("/:id/status", async (req, res) => {
       { returnDocument: 'after', runValidators: true },
     );
 
-    if (status === "Accepted" || status === "Rejected") {
-      const patientUser = await User.findOne({ name: appointment.patient, role: "patient" });
-      if (patientUser) {
-        const verb = status === "Accepted" ? "accepted" : "rejected";
-        await Notification.create({
-          userId: patientUser._id,
-          message: `Your appointment with ${appointment.doctor} on ${appointment.date} at ${appointment.time} has been ${verb}.`,
-          type: status === "Accepted" ? "appointment_accepted" : "appointment_rejected",
-          appointmentId: appointment._id,
-        });
-      }
+    if ((status === "Accepted" || status === "Rejected") && appointment.patientUserId) {
+      const verb = status === "Accepted" ? "accepted" : "rejected";
+      await Notification.create({
+        userId: appointment.patientUserId,
+        message: `Your appointment with ${appointment.doctor} on ${appointment.date} at ${appointment.time} has been ${verb}.`,
+        type: status === "Accepted" ? "appointment_accepted" : "appointment_rejected",
+        appointmentId: appointment._id,
+      });
     }
 
     res.json(appointment);
@@ -104,7 +121,8 @@ router.patch("/:id/status", async (req, res) => {
 
 router.put("/:id", adminOnly, async (req, res) => {
   try {
-    const appointment = await Appointment.findByIdAndUpdate(req.params.id, req.body, {
+    const { patientUserId, doctorUserId, ...updates } = req.body;
+    const appointment = await Appointment.findByIdAndUpdate(req.params.id, updates, {
       returnDocument: 'after',
       runValidators: true,
     });

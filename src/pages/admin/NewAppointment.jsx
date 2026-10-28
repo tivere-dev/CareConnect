@@ -47,10 +47,11 @@ export default function NewAppointmentPage() {
 
     try {
       await appointmentsAPI.create({
-        ...formData,
+        patientId: formData.patient,
+        doctorId: formData.doctor,
+        type: formData.type,
         date: toDisplayDate(formData.date),
         time: toDisplayTime(formData.time),
-        createdBy: "admin",
       });
       navigate("/admin/appointments");
     } catch (err) {
@@ -80,7 +81,7 @@ export default function NewAppointmentPage() {
             <select name="patient" value={formData.patient} onChange={handleChange} required>
               <option value="">Select a patient</option>
               {patients.map((p) => (
-                <option key={p._id} value={p.name}>{p.name}{p.email ? ` (${p.email})` : ""}</option>
+                <option key={p._id} value={p._id}>{p.name}{p.email ? ` (${p.email})` : ""}</option>
               ))}
             </select>
           </label>
@@ -90,7 +91,7 @@ export default function NewAppointmentPage() {
             <select name="doctor" value={formData.doctor} onChange={handleChange} required>
               <option value="">Select a doctor</option>
               {doctors.map((d) => (
-                <option key={d._id} value={d.name}>{d.name} — {d.specialization}</option>
+                <option key={d._id} value={d._id}>{d.name} — {d.specialization}</option>
               ))}
             </select>
           </label>

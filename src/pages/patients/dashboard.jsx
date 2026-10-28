@@ -43,7 +43,7 @@ const Dashboard = () => {
   async function loadData() {
     try {
       const [appts, docs, notifs] = await Promise.all([
-        appointmentsAPI.getAll({ patient: user?.name }),
+        appointmentsAPI.getAll(),
         doctorsAPI.getAll(),
         notificationsAPI.getAll().catch(() => []),
       ]);
@@ -80,12 +80,10 @@ const Dashboard = () => {
 
     try {
       await appointmentsAPI.create({
-        patient: user.name,
-        doctor: bookingData.doctor,
+        doctorId: bookingData.doctor,
         type: bookingData.type,
         date: bookingData.date,
         time: bookingData.time,
-        status: "Pending",
       });
       setBookingSuccess("Appointment booked successfully!");
       setBookingData({ doctor: "", type: "Consultation", date: "", time: "" });
@@ -329,7 +327,7 @@ const Dashboard = () => {
                 >
                   <option value="">Select a doctor</option>
                   {doctors.map((d) => (
-                    <option key={d._id} value={d.name}>
+                    <option key={d._id} value={d._id}>
                       {d.name} - {d.specialization}
                     </option>
                   ))}

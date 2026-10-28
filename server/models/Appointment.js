@@ -2,8 +2,11 @@ import mongoose from "mongoose";
 
 const appointmentSchema = new mongoose.Schema(
   {
+    // Names are kept for display; access control uses the linked user accounts
     patient: { type: String, required: true },
     doctor: { type: String, required: true },
+    patientUserId: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null, index: true },
+    doctorUserId: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null, index: true },
     type: {
       type: String,
       enum: ["Consultation", "Follow-up", "New Visit", "Routine Check", "Emergency"],

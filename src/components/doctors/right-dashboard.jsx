@@ -25,7 +25,7 @@ function RightDashboard() {
 
     useEffect(() => {
         if (user?.name) {
-            appointmentsAPI.getAll({ doctor: user.name })
+            appointmentsAPI.getAll()
                 .then(setAppointments)
                 .catch(console.error)
                 .finally(() => setLoading(false));

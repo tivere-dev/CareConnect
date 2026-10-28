@@ -155,7 +155,7 @@ All endpoints are prefixed with `/api`.
 | PATCH  | `/notifications/:id/read`         | Mark a notification as read         | Logged in                 |
 | GET    | `/health`                         | Health check                        | Public                    |
 
-\* Patients only see their own appointments and doctors only see appointments assigned to them; admins see everything. Appointments booked by patients always start as `Pending`.
+\* Appointments are linked to patient and doctor **user accounts by ID**, so patients only see their own appointments and doctors only see those assigned to them, even when two users share a name; admins see everything. Appointments booked by patients always start as `Pending`.
 
 ------ | --------------------------------- | ------------------------------- | ----------- |
 | POST   | `/auth/register`                  | Register a new user             | —           |
@@ -184,6 +184,7 @@ All endpoints are prefixed with `/api`.
 | `npm run dev`    | Start the Vite dev server            |
 | `npm run server` | Start the Express API                |
 | `npm run seed`   | Reset and seed the database          |
+| `npm run migrate:links` | Link existing appointments to user accounts (one-time, for older data) |
 | `npm run build`  | Build the frontend for production    |
 | `npm run preview`| Preview the production build         |
 | `npm run lint`   | Run ESLint                           |
