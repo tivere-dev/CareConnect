@@ -3,10 +3,11 @@ import Doctor from "../models/Doctor.js";
 import Patient from "../models/Patient.js";
 import Appointment from "../models/Appointment.js";
 import User from "../models/User.js";
+import auth, { adminOnly } from "../middleware/auth.js";
 
 const router = Router();
 
-router.get("/stats", async (req, res) => {
+router.get("/stats", auth, adminOnly, async (req, res) => {
   try {
     const [totalUsers, activeDoctors, totalDoctors, totalPatients, totalAppointments, appointments] =
       await Promise.all([

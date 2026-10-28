@@ -2,15 +2,27 @@ import { Router } from "express";
 import Appointment from "../models/Appointment.js";
 import Notification from "../models/Notification.js";
 import User from "../models/User.js";
-import auth from "../middleware/auth.js";
+import auth, { adminOnly } from "../middleware/auth.js";
 
 const router = Router();
+
+router.use(auth);
+
+// Patients and doctors can only access appointments they are part of
+function canAccess(user, appointment) {
+  if (user.role === "admin") return true;
+  if (user.role === "patient") return appointment.patient === user.name;
+  if (user.role === "doctor") return appointment.doctor === user.name;
+  return false;
+}
 
 router.get("/", async (req, res) => {
   try {
     const filter = {};
     if (req.query.patient) filter.patient = req.query.patient;
     if (req.query.doctor) filter.doctor = req.query.doctor;
+    if (req.user.role === "patient") filter.patient = req.user.name;
+    if (req.user.role === "doctor") filter.doctor = req.user.name;
     const appointments = await Appointment.find(filter).sort({ createdAt: -1 });
     res.json(appointments);
   } catch (err) {
@@ -21,7 +33,9 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id);
-    if (!appointment) return res.status(404).json({ message: "Appointment not found" });
+    if (!appointment || !canAccess(req.user, appointment)) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
     res.json(appointment);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -31,10 +45,14 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const data = { ...req.body };
-    if (data.createdBy === "admin") {
+    if (req.user.role === "admin") {
+      data.createdBy = "admin";
       data.status = "Accepted";
     } else {
-      data.status = data.status || "Pending";
+      data.createdBy = req.user.role;
+      data.status = "Pending";
+      if (req.user.role === "patient") data.patient = req.user.name;
+      if (req.user.role === "doctor") data.doctor = req.user.name;
     }
     const appointment = await Appointment.create(data);
     res.status(201).json(appointment);
@@ -43,7 +61,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.patch("/:id/status", auth, async (req, res) => {
+router.patch("/:id/status", async (req, res) => {
   try {
     if (req.user.role !== "admin" && req.user.role !== "doctor") {
       return res.status(403).json({ message: "Only admins and doctors can update appointment status" });
@@ -54,12 +72,16 @@ router.patch("/:id/status", auth, async (req, res) => {
       return res.status(400).json({ message: "Invalid status value" });
     }
 
+    const existing = await Appointment.findById(req.params.id);
+    if (!existing || !canAccess(req.user, existing)) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
     const appointment = await Appointment.findByIdAndUpdate(
       req.params.id,
       { status },
       { returnDocument: 'after', runValidators: true },
     );
-    if (!appointment) return res.status(404).json({ message: "Appointment not found" });
 
     if (status === "Accepted" || status === "Rejected") {
       const patientUser = await User.findOne({ name: appointment.patient, role: "patient" });
@@ -80,7 +102,7 @@ router.patch("/:id/status", auth, async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", adminOnly, async (req, res) => {
   try {
     const appointment = await Appointment.findByIdAndUpdate(req.params.id, req.body, {
       returnDocument: 'after',
@@ -93,7 +115,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", adminOnly, async (req, res) => {
   try {
     const appointment = await Appointment.findByIdAndDelete(req.params.id);
     if (!appointment) return res.status(404).json({ message: "Appointment not found" });

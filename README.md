@@ -137,8 +137,27 @@ After seeding, you can log in with:
 
 All endpoints are prefixed with `/api`.
 
-| Method | Endpoint                          | Description                     | Auth        |
-| ------ | --------------------------------- | ------------------------------- | ----------- |
+| Method | Endpoint                          | Description                         | Access                    |
+| ------ | --------------------------------- | ----------------------------------- | ------------------------- |
+| POST   | `/auth/register`                  | Register a new user                 | Public                    |
+| POST   | `/auth/login`                     | Log in and receive a JWT            | Public                    |
+| GET    | `/auth/me`                        | Get the current user                | Logged in                 |
+| POST   | `/auth/create-admin`              | Create an admin account             | Admin                     |
+| GET    | `/doctors`, `/doctors/:id`        | Browse doctors                      | Public                    |
+| POST / PUT / DELETE | `/doctors[/:id]`     | Create, update, delete doctors      | Admin                     |
+| ALL    | `/patients[/:id]`                 | Manage patient records              | Admin                     |
+| GET    | `/appointments`, `/appointments/:id` | View appointments                | Logged in (own only*)     |
+| POST   | `/appointments`                   | Book an appointment                 | Logged in                 |
+| PUT / DELETE | `/appointments/:id`         | Update or delete an appointment     | Admin                     |
+| PATCH  | `/appointments/:id/status`        | Accept / reject / complete          | Admin or assigned doctor  |
+| GET    | `/dashboard/stats`                | Admin dashboard statistics          | Admin                     |
+| GET    | `/notifications`                  | Get the user's notifications        | Logged in                 |
+| PATCH  | `/notifications/:id/read`         | Mark a notification as read         | Logged in                 |
+| GET    | `/health`                         | Health check                        | Public                    |
+
+\* Patients only see their own appointments and doctors only see appointments assigned to them; admins see everything. Appointments booked by patients always start as `Pending`.
+
+------ | --------------------------------- | ------------------------------- | ----------- |
 | POST   | `/auth/register`                  | Register a new user             | —           |
 | POST   | `/auth/login`                     | Log in and receive a JWT        | —           |
 | GET    | `/auth/me`                        | Get the current user            | User        |
@@ -180,7 +199,6 @@ All endpoints are prefixed with `/api`.
 
 ## Roadmap
 
-- Protect admin CRUD endpoints with the admin guard
 - Deploy (frontend on Vercel/Netlify, API on Render/Railway, database on Atlas)
 - Email/SMS appointment reminders
 - Automated tests

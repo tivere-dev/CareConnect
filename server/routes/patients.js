@@ -1,7 +1,10 @@
 import { Router } from "express";
 import Patient from "../models/Patient.js";
+import auth, { adminOnly } from "../middleware/auth.js";
 
 const router = Router();
+
+router.use(auth, adminOnly);
 
 router.get("/", async (req, res) => {
   try {
