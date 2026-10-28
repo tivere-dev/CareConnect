@@ -11,10 +11,34 @@ Built with **React 19 + Vite + Tailwind CSS** on the frontend and **Node.js + Ex
 ### Landing page
 ![CareConnect landing page](docs/screenshots/landing.png)
 
+### Admin
+![Admin dashboard with appointment analytics](docs/screenshots/admin-dashboard.png)
+
 <table>
   <tr>
-    <td width="50%"><strong>Sign in</strong><br><img src="docs/screenshots/login.png" alt="Sign in page"></td>
-    <td width="50%"><strong>Patient registration</strong><br><img src="docs/screenshots/register.png" alt="Patient registration page"></td>
+    <td width="50%"><strong>Doctor management</strong><br><img src="docs/screenshots/admin-doctors.png" alt="Doctor management"></td>
+    <td width="50%"><strong>Appointment management</strong><br><img src="docs/screenshots/admin-appointments.png" alt="Appointment management"></td>
+  </tr>
+</table>
+
+### Patient
+<table>
+  <tr>
+    <td width="50%"><strong>Patient dashboard</strong><br><img src="docs/screenshots/patient-dashboard.png" alt="Patient dashboard"></td>
+    <td width="50%"><strong>Find a doctor</strong><br><img src="docs/screenshots/patient-find-doctors.png" alt="Find a doctor"></td>
+  </tr>
+</table>
+
+![Doctor profile with appointment booking](docs/screenshots/patient-doctor-profile.png)
+
+### Doctor
+![Doctor dashboard with accept / reject actions](docs/screenshots/doctor-dashboard.png)
+
+### Authentication
+<table>
+  <tr>
+    <td width="50%"><strong>Sign in</strong><br><img src="docs/screenshots/login.png" alt="Sign in"></td>
+    <td width="50%"><strong>Patient registration</strong><br><img src="docs/screenshots/register.png" alt="Patient registration"></td>
   </tr>
 </table>
 
