@@ -2,6 +2,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AdminSidebar from "../../components/admin/AdminSidebar";
+import { doctorsAPI } from "../../services/api";
 
 const defaultValues = {
   name: "",
@@ -11,25 +12,33 @@ const defaultValues = {
   status: "Active",
 };
 
-export default function EditDoctorPage({ doctors, onUpdateDoctor }) {
+export default function EditDoctorPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const doctor = doctors.find((item) => String(item.id) === id);
   const [formData, setFormData] = useState(defaultValues);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (doctor) {
-      setFormData({
-        name: doctor.name,
-        credential: doctor.credential,
-        specialization: doctor.specialization,
-        email: doctor.email,
-        status: doctor.status,
-      });
-    }
-  }, [doctor]);
+    doctorsAPI
+      .getById(id)
+      .then((doctor) => {
+        setFormData({
+          name: doctor.name,
+          credential: doctor.credential,
+          specialization: doctor.specialization,
+          email: doctor.email,
+          status: doctor.status,
+        });
+      })
+      .catch(() => setNotFound(true))
+      .finally(() => setLoading(false));
+  }, [id]);
 
-  if (!doctor) {
+  if (loading) return <div className="admin-shell doctor-shell"><AdminSidebar /><main className="doctor-main"><p>Loading...</p></main></div>;
+
+  if (notFound) {
     return (
       <div className="admin-shell doctor-shell">
         <AdminSidebar />
@@ -49,10 +58,14 @@ export default function EditDoctorPage({ doctors, onUpdateDoctor }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    onUpdateDoctor(doctor.id, formData);
-    navigate("/admin/doctors");
+    try {
+      await doctorsAPI.update(id, formData);
+      navigate("/admin/doctors");
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   return (
@@ -69,52 +82,27 @@ export default function EditDoctorPage({ doctors, onUpdateDoctor }) {
           <p>Update doctor profile details and save changes.</p>
         </div>
 
+        {error && <p style={{ color: "#ef4444" }}>{error}</p>}
+
         <form className="doctor-form-card" onSubmit={handleSubmit}>
           <label>
             Full Name
-            <input
-              type="text"
-              name="name"
-              placeholder="e.g. Dr. Sarah Jenkins"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
+            <input type="text" name="name" value={formData.name} onChange={handleChange} required />
           </label>
 
           <label>
             Professional Title
-            <input
-              type="text"
-              name="credential"
-              placeholder="e.g. MD, FACC"
-              value={formData.credential}
-              onChange={handleChange}
-            />
+            <input type="text" name="credential" value={formData.credential} onChange={handleChange} />
           </label>
 
           <label>
             Specialization
-            <input
-              type="text"
-              name="specialization"
-              placeholder="e.g. Cardiology"
-              value={formData.specialization}
-              onChange={handleChange}
-              required
-            />
+            <input type="text" name="specialization" value={formData.specialization} onChange={handleChange} required />
           </label>
 
           <label>
             Email Address
-            <input
-              type="email"
-              name="email"
-              placeholder="e.g. s.jenkins@careconnect.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
           </label>
 
           <label>
@@ -127,9 +115,7 @@ export default function EditDoctorPage({ doctors, onUpdateDoctor }) {
           </label>
 
           <div className="doctor-form-actions">
-            <Link to="/admin/doctors" className="doctor-outline-btn">
-              Cancel
-            </Link>
+            <Link to="/admin/doctors" className="doctor-outline-btn">Cancel</Link>
             <button type="submit" className="doctor-add-btn">
               <Save size={16} />
               <span>Save Changes</span>

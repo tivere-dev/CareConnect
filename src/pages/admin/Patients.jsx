@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Download,
   Filter,
@@ -11,6 +12,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import AdminSidebar from "../../components/admin/AdminSidebar";
+import { patientsAPI } from "../../services/api";
 
 const statusClass = {
   Stable: "patient-status patient-status-stable",
@@ -29,7 +31,25 @@ function PatientAvatar({ name }) {
   return <span className="patient-avatar">{initials}</span>;
 }
 
-export default function PatientsPage({ patients }) {
+export default function PatientsPage() {
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    patientsAPI.getAll().then(setPatients).catch(console.error).finally(() => setLoading(false));
+  }, []);
+
+  async function handleDelete(id) {
+    try {
+      await patientsAPI.delete(id);
+      setPatients((prev) => prev.filter((p) => p._id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  if (loading) return <div className="admin-shell patient-shell"><AdminSidebar /><main className="doctor-main patient-main"><p>Loading...</p></main></div>;
+
   return (
     <div className="admin-shell patient-shell">
       <AdminSidebar />
@@ -75,7 +95,6 @@ export default function PatientsPage({ patients }) {
               <thead>
                 <tr>
                   <th>PATIENT NAME</th>
-                  <th>PATIENT ID</th>
                   <th>AGE / GENDER</th>
                   <th>CONDITION</th>
                   <th>ASSIGNED DOCTOR</th>
@@ -85,14 +104,13 @@ export default function PatientsPage({ patients }) {
               </thead>
               <tbody>
                 {patients.map((patient) => (
-                  <tr key={patient.id}>
+                  <tr key={patient._id}>
                     <td>
                       <div className="doctor-name-cell">
                         <PatientAvatar name={patient.name} />
                         <strong>{patient.name}</strong>
                       </div>
                     </td>
-                    <td>{patient.id}</td>
                     <td>
                       {patient.age} / {patient.gender}
                     </td>
@@ -103,10 +121,10 @@ export default function PatientsPage({ patients }) {
                     </td>
                     <td>
                       <div className="doctor-actions-cell">
-                        <Link to={`/patients/${patient.id}/edit`} aria-label={`Edit ${patient.name}`}>
+                        <Link to={`/admin/patients/${patient._id}/edit`} aria-label={`Edit ${patient.name}`}>
                           <Pencil size={16} />
                         </Link>
-                        <button type="button" aria-label={`Delete ${patient.name}`}>
+                        <button type="button" aria-label={`Delete ${patient.name}`} onClick={() => handleDelete(patient._id)}>
                           <Trash2 size={16} />
                         </button>
                       </div>
@@ -121,21 +139,6 @@ export default function PatientsPage({ patients }) {
             <p>
               Showing 1 to {patients.length} of {patients.length} patients
             </p>
-            <div className="doctor-pagination">
-              <button type="button" aria-label="Previous page">
-                ‹
-              </button>
-              <button type="button" className="active">
-                1
-              </button>
-              <button type="button">2</button>
-              <button type="button">3</button>
-              <span>...</span>
-              <button type="button">5</button>
-              <button type="button" aria-label="Next page">
-                ›
-              </button>
-            </div>
           </div>
         </section>
 
@@ -156,7 +159,7 @@ export default function PatientsPage({ patients }) {
             </span>
             <div>
               <p>Stable Patients</p>
-              <strong>{patients.filter((item) => item.status === "Stable").length}</strong>
+              <strong>{patients.filter((p) => p.status === "Stable").length}</strong>
             </div>
           </article>
 
@@ -166,9 +169,7 @@ export default function PatientsPage({ patients }) {
             </span>
             <div>
               <p>Under Review</p>
-              <strong>
-                {patients.filter((item) => item.status === "Under Review").length}
-              </strong>
+              <strong>{patients.filter((p) => p.status === "Under Review").length}</strong>
             </div>
           </article>
         </section>

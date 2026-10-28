@@ -2,6 +2,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AdminSidebar from "../../components/admin/AdminSidebar";
+import { patientsAPI } from "../../services/api";
 
 const defaultValues = {
   name: "",
@@ -12,26 +13,34 @@ const defaultValues = {
   status: "Stable",
 };
 
-export default function EditPatientPage({ patients, onUpdatePatient }) {
+export default function EditPatientPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const patient = patients.find((item) => item.id === id);
   const [formData, setFormData] = useState(defaultValues);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (patient) {
-      setFormData({
-        name: patient.name,
-        age: String(patient.age),
-        gender: patient.gender,
-        condition: patient.condition,
-        doctor: patient.doctor,
-        status: patient.status,
-      });
-    }
-  }, [patient]);
+    patientsAPI
+      .getById(id)
+      .then((patient) => {
+        setFormData({
+          name: patient.name,
+          age: String(patient.age),
+          gender: patient.gender,
+          condition: patient.condition,
+          doctor: patient.doctor,
+          status: patient.status,
+        });
+      })
+      .catch(() => setNotFound(true))
+      .finally(() => setLoading(false));
+  }, [id]);
 
-  if (!patient) {
+  if (loading) return <div className="admin-shell patient-shell"><AdminSidebar /><main className="doctor-main"><p>Loading...</p></main></div>;
+
+  if (notFound) {
     return (
       <div className="admin-shell patient-shell">
         <AdminSidebar />
@@ -51,10 +60,14 @@ export default function EditPatientPage({ patients, onUpdatePatient }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    onUpdatePatient(patient.id, { ...formData, age: Number(formData.age) });
-    navigate("/admin/patients");
+    try {
+      await patientsAPI.update(id, { ...formData, age: Number(formData.age) });
+      navigate("/admin/patients");
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   return (
@@ -71,61 +84,20 @@ export default function EditPatientPage({ patients, onUpdatePatient }) {
           <p>Update patient profile details and save changes.</p>
         </div>
 
+        {error && <p style={{ color: "#ef4444" }}>{error}</p>}
+
         <form className="doctor-form-card" onSubmit={handleSubmit}>
-          <label>
-            Full Name
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </label>
-
-          <label>
-            Age
-            <input
-              type="number"
-              name="age"
-              value={formData.age}
-              onChange={handleChange}
-              required
-            />
-          </label>
-
-          <label>
-            Gender
+          <label>Full Name<input type="text" name="name" value={formData.name} onChange={handleChange} required /></label>
+          <label>Age<input type="number" name="age" value={formData.age} onChange={handleChange} required /></label>
+          <label>Gender
             <select name="gender" value={formData.gender} onChange={handleChange}>
               <option>Female</option>
               <option>Male</option>
             </select>
           </label>
-
-          <label>
-            Condition
-            <input
-              type="text"
-              name="condition"
-              value={formData.condition}
-              onChange={handleChange}
-              required
-            />
-          </label>
-
-          <label>
-            Assigned Doctor
-            <input
-              type="text"
-              name="doctor"
-              value={formData.doctor}
-              onChange={handleChange}
-              required
-            />
-          </label>
-
-          <label>
-            Status
+          <label>Condition<input type="text" name="condition" value={formData.condition} onChange={handleChange} required /></label>
+          <label>Assigned Doctor<input type="text" name="doctor" value={formData.doctor} onChange={handleChange} required /></label>
+          <label>Status
             <select name="status" value={formData.status} onChange={handleChange}>
               <option>Stable</option>
               <option>Under Review</option>
@@ -134,9 +106,7 @@ export default function EditPatientPage({ patients, onUpdatePatient }) {
           </label>
 
           <div className="doctor-form-actions">
-            <Link to="/admin/patients" className="doctor-outline-btn">
-              Cancel
-            </Link>
+            <Link to="/admin/patients" className="doctor-outline-btn">Cancel</Link>
             <button type="submit" className="doctor-add-btn">
               <Save size={16} />
               <span>Save Changes</span>

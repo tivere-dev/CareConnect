@@ -2,15 +2,16 @@ import {
   ClipboardList,
   FileBarChart2,
   LayoutDashboard,
+  LogOut,
   Settings,
   ShieldPlus,
   Stethoscope,
-  User,
   UserRound,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SETTINGS_STORAGE_KEY, SETTINGS_UPDATED_EVENT } from "../../constants/adminSettings";
+import { useAuth } from "../../context/AuthContext";
 
 const mainLinks = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/admin/dashboard" },
@@ -47,6 +48,7 @@ function readBrandSettings() {
 export default function AdminSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, logout } = useAuth();
   const [brandSettings, setBrandSettings] = useState(() => readBrandSettings());
 
   useEffect(() => {
@@ -118,12 +120,24 @@ export default function AdminSidebar() {
       </nav>
 
       <article className="admin-profile-card">
-        <div className="admin-avatar">AR</div>
+        <div className="admin-avatar">
+          {user?.name?.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2) || "AD"}
+        </div>
         <div>
-          <h4>Dr. Alex Rivers</h4>
-          <p>Chief Administrator</p>
+          <h4>{user?.name || "Admin"}</h4>
+          <p>Administrator</p>
         </div>
       </article>
+
+      <button
+        type="button"
+        className="admin-nav-link admin-nav-button"
+        onClick={() => { logout(); navigate("/"); }}
+        style={{ marginTop: "auto", color: "#ef4444" }}
+      >
+        <LogOut size={18} />
+        <span>Logout</span>
+      </button>
     </aside>
   );
 }

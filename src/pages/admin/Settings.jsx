@@ -1,5 +1,6 @@
-import { CheckCircle2, HelpCircle, ImagePlus, MinusCircle } from "lucide-react";
+import { CheckCircle2, HelpCircle, ImagePlus, MinusCircle, UserPlus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import { SETTINGS_STORAGE_KEY, SETTINGS_UPDATED_EVENT } from "../../constants/adminSettings";
 
@@ -32,6 +33,7 @@ function PermissionIcon({ enabled }) {
 }
 
 export default function SettingsPage() {
+  const navigate = useNavigate();
   const logoInputRef = useRef(null);
   const [settings, setSettings] = useState(defaultSettings);
   const [saveState, setSaveState] = useState("");
@@ -383,9 +385,18 @@ export default function SettingsPage() {
               </table>
             </div>
 
-            <div className="settings-table-foot">
+            <div className="settings-table-foot" style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
               <button type="button" className="settings-link-btn" onClick={handleManageRoles}>
                 Manage Custom Roles
+              </button>
+              <button
+                type="button"
+                className="settings-save-btn"
+                style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}
+                onClick={() => navigate("/admin/admins/new")}
+              >
+                <UserPlus size={16} />
+                Add New Admin
               </button>
             </div>
           </section>

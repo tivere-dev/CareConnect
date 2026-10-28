@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { Download, Filter, Pencil, Plus, Search, ShieldPlus, Trash2, UserPlus2, UsersRound } from "lucide-react";
 import { Link } from "react-router-dom";
 import AdminSidebar from "../../components/admin/AdminSidebar";
+import { doctorsAPI } from "../../services/api";
 
 const statusClass = {
   Active: "doctor-status doctor-status-active",
@@ -20,7 +22,25 @@ function DoctorAvatar({ name }) {
   return <span className="doctor-avatar">{initials}</span>;
 }
 
-export default function DoctorManagementPage({ doctors, onDeleteDoctor }) {
+export default function DoctorManagementPage() {
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    doctorsAPI.getAll().then(setDoctors).catch(console.error).finally(() => setLoading(false));
+  }, []);
+
+  async function handleDelete(id) {
+    try {
+      await doctorsAPI.delete(id);
+      setDoctors((prev) => prev.filter((d) => d._id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  if (loading) return <div className="admin-shell doctor-shell"><AdminSidebar /><main className="doctor-main"><p>Loading...</p></main></div>;
+
   return (
     <div className="admin-shell doctor-shell">
       <AdminSidebar />
@@ -74,7 +94,7 @@ export default function DoctorManagementPage({ doctors, onDeleteDoctor }) {
               </thead>
               <tbody>
                 {doctors.map((doctor) => (
-                  <tr key={doctor.id}>
+                  <tr key={doctor._id}>
                     <td>
                       <div className="doctor-name-cell">
                         <DoctorAvatar name={doctor.name} />
@@ -93,13 +113,13 @@ export default function DoctorManagementPage({ doctors, onDeleteDoctor }) {
                     </td>
                     <td>
                       <div className="doctor-actions-cell">
-                        <Link to={`/doctors/${doctor.id}/edit`} aria-label={`Edit ${doctor.name}`}>
+                        <Link to={`/admin/doctors/${doctor._id}/edit`} aria-label={`Edit ${doctor.name}`}>
                           <Pencil size={16} />
                         </Link>
                         <button
                           type="button"
                           aria-label={`Delete ${doctor.name}`}
-                          onClick={() => onDeleteDoctor(doctor.id)}
+                          onClick={() => handleDelete(doctor._id)}
                         >
                           <Trash2 size={16} />
                         </button>
@@ -115,21 +135,6 @@ export default function DoctorManagementPage({ doctors, onDeleteDoctor }) {
             <p>
               Showing 1 to {doctors.length} of {doctors.length} doctors
             </p>
-            <div className="doctor-pagination">
-              <button type="button" aria-label="Previous page">
-                ‹
-              </button>
-              <button type="button" className="active">
-                1
-              </button>
-              <button type="button">2</button>
-              <button type="button">3</button>
-              <span>...</span>
-              <button type="button">5</button>
-              <button type="button" aria-label="Next page">
-                ›
-              </button>
-            </div>
           </div>
         </section>
 
@@ -150,7 +155,7 @@ export default function DoctorManagementPage({ doctors, onDeleteDoctor }) {
             </span>
             <div>
               <p>Active Duty</p>
-              <strong>{doctors.filter((doctor) => doctor.status === "Active").length}</strong>
+              <strong>{doctors.filter((d) => d.status === "Active").length}</strong>
             </div>
           </article>
 
@@ -160,7 +165,7 @@ export default function DoctorManagementPage({ doctors, onDeleteDoctor }) {
             </span>
             <div>
               <p>Specialties</p>
-              <strong>{new Set(doctors.map((doctor) => doctor.specialization)).size}</strong>
+              <strong>{new Set(doctors.map((d) => d.specialization)).size}</strong>
             </div>
           </article>
         </section>

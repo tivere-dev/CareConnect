@@ -1,6 +1,7 @@
 import { useState } from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Menu, ShieldPlus, X } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 const navItems = [
   { label: "Doctors", href: "#doctors" },
@@ -11,16 +12,24 @@ const navItems = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { user, logout } = useAuth();
+
+  function getDashboardPath() {
+    if (!user) return "/login";
+    if (user.role === "admin") return "/admin/dashboard";
+    if (user.role === "doctor") return "/doctor/dashboard";
+    return "/patient/dashboard";
+  }
 
   return (
     <header className="site-header">
       <nav className="container nav-row" aria-label="Main navigation">
-        <a href="#home" className="brand" onClick={() => setOpen(false)}>
+        <Link to="/" className="brand" onClick={() => setOpen(false)}>
           <span className="brand-icon">
             <ShieldPlus size={14} />
           </span>
           <span>CareConnect</span>
-        </a>
+        </Link>
 
         <ul className="nav-links" role="list">
           {navItems.map((item) => (
@@ -31,8 +40,17 @@ export default function Navbar() {
         </ul>
 
         <div className="nav-actions">
-          <button className="text-btn">Sign In</button>
-          <button className="pill-btn">Register</button>
+          {user ? (
+            <>
+              <Link to={getDashboardPath()} className="pill-btn">Dashboard</Link>
+              <button className="text-btn" onClick={logout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="text-btn">Sign In</Link>
+              <Link to="/register" className="pill-btn">Register</Link>
+            </>
+          )}
         </div>
 
         <button
@@ -55,8 +73,17 @@ export default function Navbar() {
               </a>
             ))}
             <div className="mobile-actions">
-              <button className="text-btn">Sign In</button>
-              <button className="pill-btn">Register</button>
+              {user ? (
+                <>
+                  <Link to={getDashboardPath()} className="pill-btn" onClick={() => setOpen(false)}>Dashboard</Link>
+                  <button className="text-btn" onClick={() => { logout(); setOpen(false); }}>Logout</button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="text-btn" onClick={() => setOpen(false)}>Sign In</Link>
+                  <Link to="/register" className="pill-btn" onClick={() => setOpen(false)}>Register</Link>
+                </>
+              )}
             </div>
           </div>
         </div>

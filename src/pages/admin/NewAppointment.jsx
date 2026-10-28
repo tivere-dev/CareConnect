@@ -1,7 +1,8 @@
 import { ArrowLeft, Save } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AdminSidebar from "../../components/admin/AdminSidebar";
+import { appointmentsAPI, doctorsAPI, patientsAPI } from "../../services/api";
 
 const defaultValues = {
   patient: "",
@@ -9,16 +10,11 @@ const defaultValues = {
   type: "Consultation",
   date: "",
   time: "",
-  status: "Pending",
 };
 
 function toDisplayDate(dateStr) {
   const date = new Date(`${dateStr}T00:00:00`);
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  });
+  return date.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
 }
 
 function toDisplayTime(timeStr) {
@@ -28,29 +24,38 @@ function toDisplayTime(timeStr) {
   return `${String(hour12).padStart(2, "0")}:${String(minutes).padStart(2, "0")} ${suffix}`;
 }
 
-export default function NewAppointmentPage({ onAddAppointment }) {
+export default function NewAppointmentPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(defaultValues);
+  const [doctors, setDoctors] = useState([]);
+  const [patients, setPatients] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    doctorsAPI.getAll().then((docs) => setDoctors(docs.filter((d) => d.status === "Active"))).catch(console.error);
+    patientsAPI.getAll().then(setPatients).catch(console.error);
+  }, []);
 
   function handleChange(event) {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    if (!formData.patient || !formData.doctor || !formData.date || !formData.time) return;
 
-    if (!formData.patient || !formData.doctor || !formData.date || !formData.time) {
-      return;
+    try {
+      await appointmentsAPI.create({
+        ...formData,
+        date: toDisplayDate(formData.date),
+        time: toDisplayTime(formData.time),
+        createdBy: "admin",
+      });
+      navigate("/admin/appointments");
+    } catch (err) {
+      setError(err.message);
     }
-
-    onAddAppointment({
-      ...formData,
-      date: toDisplayDate(formData.date),
-      time: toDisplayTime(formData.time),
-    });
-
-    navigate("/admin/appointments");
   }
 
   return (
@@ -67,29 +72,27 @@ export default function NewAppointmentPage({ onAddAppointment }) {
           <p>Fill in the details and save to create a new appointment.</p>
         </div>
 
+        {error && <p style={{ color: "#ef4444" }}>{error}</p>}
+
         <form className="doctor-form-card" onSubmit={handleSubmit}>
           <label>
-            Patient Name
-            <input
-              type="text"
-              name="patient"
-              placeholder="e.g. Sarah Jenkins"
-              value={formData.patient}
-              onChange={handleChange}
-              required
-            />
+            Patient
+            <select name="patient" value={formData.patient} onChange={handleChange} required>
+              <option value="">Select a patient</option>
+              {patients.map((p) => (
+                <option key={p._id} value={p.name}>{p.name}{p.email ? ` (${p.email})` : ""}</option>
+              ))}
+            </select>
           </label>
 
           <label>
-            Assigned Doctor
-            <input
-              type="text"
-              name="doctor"
-              placeholder="e.g. Dr. Robert Miller"
-              value={formData.doctor}
-              onChange={handleChange}
-              required
-            />
+            Doctor (Active Only)
+            <select name="doctor" value={formData.doctor} onChange={handleChange} required>
+              <option value="">Select a doctor</option>
+              {doctors.map((d) => (
+                <option key={d._id} value={d.name}>{d.name} — {d.specialization}</option>
+              ))}
+            </select>
           </label>
 
           <label>
@@ -103,42 +106,11 @@ export default function NewAppointmentPage({ onAddAppointment }) {
             </select>
           </label>
 
-          <label>
-            Date
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              required
-            />
-          </label>
-
-          <label>
-            Time
-            <input
-              type="time"
-              name="time"
-              value={formData.time}
-              onChange={handleChange}
-              required
-            />
-          </label>
-
-          <label>
-            Status
-            <select name="status" value={formData.status} onChange={handleChange}>
-              <option>Pending</option>
-              <option>Confirmed</option>
-              <option>In Progress</option>
-              <option>Canceled</option>
-            </select>
-          </label>
+          <label>Date<input type="date" name="date" value={formData.date} onChange={handleChange} required /></label>
+          <label>Time<input type="time" name="time" value={formData.time} onChange={handleChange} required /></label>
 
           <div className="doctor-form-actions">
-            <Link to="/admin/appointments" className="doctor-outline-btn">
-              Cancel
-            </Link>
+            <Link to="/admin/appointments" className="doctor-outline-btn">Cancel</Link>
             <button type="submit" className="doctor-add-btn">
               <Save size={16} />
               <span>Save Appointment</span>
