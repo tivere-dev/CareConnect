@@ -6,6 +6,20 @@ Built with **React 19 + Vite + Tailwind CSS** on the frontend and **Node.js + Ex
 
 ---
 
+## Screenshots
+
+### Landing page
+![CareConnect landing page](docs/screenshots/landing.png)
+
+<table>
+  <tr>
+    <td width="50%"><strong>Sign in</strong><br><img src="docs/screenshots/login.png" alt="Sign in page"></td>
+    <td width="50%"><strong>Patient registration</strong><br><img src="docs/screenshots/register.png" alt="Patient registration page"></td>
+  </tr>
+</table>
+
+---
+
 ## Features
 
 ### Patients
