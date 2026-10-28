@@ -173,11 +173,8 @@ All endpoints are prefixed with `/api`.
 
 ## Team
 
-CareConnect was built as a team project. Contributors:
-
-- **Tivere Madagwa** — backend API, authentication, database integration, and frontend wiring
-- **Ademide Akinlolu**
-- **Finidi**
+- **Tivere Madagwa** — lead developer: built most of the React frontend and the full backend (Express API, MongoDB models, JWT authentication, role-based access)
+- **Finidi** — contributor
 
 ---
 
